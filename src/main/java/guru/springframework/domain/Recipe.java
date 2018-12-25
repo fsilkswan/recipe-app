@@ -4,6 +4,8 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,7 +18,11 @@ public class Recipe
 {
     private Integer cookTime;
     private String  description;
-    private String  directions;
+
+    @Enumerated(value = EnumType.STRING/* Override of default behavior of ORDINAL! */)
+    private Difficulty difficulty;
+
+    private String directions;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,15 +35,12 @@ public class Recipe
     private Set<Ingredient> ingredients;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Notes notes;
-
+    private Notes   notes;
     private Integer prepTime;
     private Integer servings;
     private String  source;
-    private String  url;
 
-    /* TODO: Add 'difficulty'. */
-    // private Difficulty difficulty;
+    private String url;
 
     public Integer getCookTime()
     {
@@ -47,6 +50,11 @@ public class Recipe
     public String getDescription()
     {
         return description;
+    }
+
+    public Difficulty getDifficulty()
+    {
+        return difficulty;
     }
 
     public String getDirections()
@@ -102,6 +110,11 @@ public class Recipe
     public void setDescription(final String description)
     {
         this.description = description;
+    }
+
+    public void setDifficulty(final Difficulty difficulty)
+    {
+        this.difficulty = difficulty;
     }
 
     public void setDirections(final String directions)
