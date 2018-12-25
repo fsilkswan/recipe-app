@@ -9,15 +9,25 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Recipe
 {
+    @ManyToMany
+    @JoinTable(name = "recipe_category",
+        joinColumns = { @JoinColumn(name = "recipe_id") },
+        inverseJoinColumns = { @JoinColumn(name = "category_id") })
+    private Set<Category> categories;
+
     private Integer cookTime;
-    private String  description;
+
+    private String description;
 
     @Enumerated(value = EnumType.STRING/* Override of default behavior of ORDINAL! */)
     private Difficulty difficulty;
@@ -41,6 +51,11 @@ public class Recipe
     private String  source;
 
     private String url;
+
+    public Set<Category> getCategories()
+    {
+        return categories;
+    }
 
     public Integer getCookTime()
     {
@@ -100,6 +115,11 @@ public class Recipe
     public String getUrl()
     {
         return url;
+    }
+
+    public void setCategories(final Set<Category> categories)
+    {
+        this.categories = categories;
     }
 
     public void setCookTime(final Integer cookTime)
