@@ -1,11 +1,14 @@
 package guru.springframework.domain;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -21,6 +24,9 @@ public class Recipe
 
     @Lob /* Stored in BLOB on DB side. */
     private Byte[] image;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
@@ -56,6 +62,11 @@ public class Recipe
     public Byte[] getImage()
     {
         return image;
+    }
+
+    public Set<Ingredient> getIngredients()
+    {
+        return ingredients;
     }
 
     public Notes getNotes()
@@ -106,6 +117,11 @@ public class Recipe
     public void setImage(final Byte[] image)
     {
         this.image = image;
+    }
+
+    public void setIngredients(final Set<Ingredient> ingredients)
+    {
+        this.ingredients = ingredients;
     }
 
     public void setNotes(final Notes notes)
