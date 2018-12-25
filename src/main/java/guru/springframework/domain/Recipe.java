@@ -26,8 +26,7 @@ public class Recipe
     private Set<Category> categories;
 
     private Integer cookTime;
-
-    private String description;
+    private String  description;
 
     @Enumerated(value = EnumType.STRING/* Override of default behavior of ORDINAL! */)
     private Difficulty difficulty;
@@ -45,7 +44,8 @@ public class Recipe
     private Set<Ingredient> ingredients;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Notes   notes;
+    private Notes notes;
+
     private Integer prepTime;
     private Integer servings;
     private String  source;
