@@ -26,6 +26,18 @@ public class Ingredient
     @OneToOne(fetch = FetchType.EAGER/* Show the intent although this is default for One-To-One in Hibernate. */)
     private UnitOfMeasure unitOfMeasure;
 
+    public Ingredient()
+    {
+        /* Empty by intention. */
+    }
+
+    public Ingredient(final BigDecimal amount, final UnitOfMeasure unitOfMeasure, final String description)
+    {
+        this.amount = amount;
+        this.description = description;
+        this.unitOfMeasure = unitOfMeasure;
+    }
+
     public BigDecimal getAmount()
     {
         return amount;

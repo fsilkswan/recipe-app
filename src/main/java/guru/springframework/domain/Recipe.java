@@ -1,5 +1,6 @@
 package guru.springframework.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -31,6 +32,7 @@ public class Recipe
     @Enumerated(value = EnumType.STRING/* Override of default behavior of ORDINAL! */)
     private Difficulty difficulty;
 
+    @Lob
     private String directions;
 
     @Id
@@ -54,6 +56,11 @@ public class Recipe
 
     public Set<Category> getCategories()
     {
+        if( categories == null )
+        {
+            categories = new HashSet<>();
+        }
+
         return categories;
     }
 
@@ -89,6 +96,11 @@ public class Recipe
 
     public Set<Ingredient> getIngredients()
     {
+        if( ingredients == null )
+        {
+            ingredients = new HashSet<>();
+        }
+
         return ingredients;
     }
 

@@ -8,6 +8,36 @@
 
 <body>
 	<h1 th:text="'My Recipes!'">Recipe Home</h1>
+	<ul>
+		<li th:each="currRecipe : ${recipesList}">
+			<table>
+				<thead>
+					<tr>
+						<th colspan="2" th:text="${currRecipe.description}">Recipe Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Source:</td>
+						<td th:utext="'<a href=&quot;' + ${currRecipe.url} + '&quot;>' + ${currRecipe.source} + ':&nbsp;' + ${currRecipe.url} + '</a>'">Source-Link</td>
+					</tr>
+					<tr>
+						<td>Difficulty:</td>
+						<td th:text="${currRecipe.difficulty}">Difficulty-Level</td>
+					</tr>
+					<tr>
+						<td>Ingredients:</td>
+						<td>
+							<ul>
+								<li th:each="currIngredient : ${currRecipe.ingredients}"><span
+									th:text="${currIngredient.amount} + '&nbsp;' + ${currIngredient.unitOfMeasure.description} + '&nbsp;' + ${currIngredient.description}">Ingredient</span></li>
+							</ul>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</li>
+	</ul>
 </body>
 
 </html>
