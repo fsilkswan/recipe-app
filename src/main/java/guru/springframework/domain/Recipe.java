@@ -54,6 +54,17 @@ public class Recipe
 
     private String url;
 
+    public Recipe addIngredient(final Ingredient ingredient)
+    {
+        if( ingredient != null )
+        {
+            getIngredients().add(ingredient);
+            ingredient.setRecipe(this);
+        }
+
+        return this;
+    }
+
     public Set<Category> getCategories()
     {
         if( categories == null )
@@ -172,6 +183,10 @@ public class Recipe
     public void setNotes(final Notes notes)
     {
         this.notes = notes;
+        if( notes != null )
+        {
+            notes.setRecipe(this);
+        }
     }
 
     public void setPrepTime(final Integer prepTime)

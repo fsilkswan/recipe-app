@@ -38,6 +38,16 @@ public class Ingredient
         this.unitOfMeasure = unitOfMeasure;
     }
 
+    public Ingredient(final double amount, final UnitOfMeasure unitOfMeasure, final String description)
+    {
+        this(new BigDecimal(amount), unitOfMeasure, description);
+    }
+
+    public Ingredient(final int amount, final UnitOfMeasure unitOfMeasure, final String description)
+    {
+        this(new BigDecimal(amount), unitOfMeasure, description);
+    }
+
     public BigDecimal getAmount()
     {
         return amount;
