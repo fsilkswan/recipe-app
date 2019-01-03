@@ -4,6 +4,8 @@ import static java.text.MessageFormat.format;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,7 @@ public class TestDataCreator
     }
 
     @Override
+    @Transactional
     public void onApplicationEvent(final ContextRefreshedEvent event)
     {
         if( 0 < recipeRepository.count() )
