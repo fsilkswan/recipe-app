@@ -10,11 +10,19 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@EqualsAndHashCode(exclude = { "recipe" })
+@NoArgsConstructor
 @Entity
-public class Ingredient
+public final class Ingredient
 {
     private BigDecimal amount;
-    private String     description;
+
+    private String description;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +33,6 @@ public class Ingredient
 
     @OneToOne(fetch = FetchType.EAGER/* Show the intent although this is default for One-To-One in Hibernate. */)
     private UnitOfMeasure unitOfMeasure;
-
-    public Ingredient()
-    {
-        /* Empty by intention. */
-    }
 
     public Ingredient(final BigDecimal amount, final UnitOfMeasure unitOfMeasure, final String description)
     {
@@ -46,55 +49,5 @@ public class Ingredient
     public Ingredient(final int amount, final UnitOfMeasure unitOfMeasure, final String description)
     {
         this(new BigDecimal(amount), unitOfMeasure, description);
-    }
-
-    public BigDecimal getAmount()
-    {
-        return amount;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public Recipe getRecipe()
-    {
-        return recipe;
-    }
-
-    public UnitOfMeasure getUnitOfMeasure()
-    {
-        return unitOfMeasure;
-    }
-
-    public void setAmount(final BigDecimal amount)
-    {
-        this.amount = amount;
-    }
-
-    public void setDescription(final String description)
-    {
-        this.description = description;
-    }
-
-    public void setId(final Long id)
-    {
-        this.id = id;
-    }
-
-    public void setRecipe(final Recipe recipe)
-    {
-        this.recipe = recipe;
-    }
-
-    public void setUnitOfMeasure(final UnitOfMeasure unitOfMeasure)
-    {
-        this.unitOfMeasure = unitOfMeasure;
     }
 }

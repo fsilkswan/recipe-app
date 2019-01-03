@@ -7,8 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(exclude = { "recipe" })
 @Entity
-public class Notes
+public final class Notes
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,34 +24,4 @@ public class Notes
 
     @Lob /* Stored in CLOB on DB side. */
     private String recipeNotes;
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public Recipe getRecipe()
-    {
-        return recipe;
-    }
-
-    public String getRecipeNotes()
-    {
-        return recipeNotes;
-    }
-
-    public void setId(final Long id)
-    {
-        this.id = id;
-    }
-
-    public void setRecipe(final Recipe recipe)
-    {
-        this.recipe = recipe;
-    }
-
-    public void setRecipeNotes(final String recipeNotes)
-    {
-        this.recipeNotes = recipeNotes;
-    }
 }

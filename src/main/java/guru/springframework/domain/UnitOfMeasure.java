@@ -5,32 +5,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.Data;
+
+@Data
 @Entity
-public class UnitOfMeasure
+public final class UnitOfMeasure
 {
     private String description;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setDescription(final String description)
-    {
-        this.description = description;
-    }
-
-    public void setId(final Long id)
-    {
-        this.id = id;
-    }
 }

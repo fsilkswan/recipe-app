@@ -17,8 +17,10 @@ import guru.springframework.domain.UnitOfMeasure;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class TestDataCreator
     implements ApplicationListener<ContextRefreshedEvent>
 {
@@ -40,17 +42,18 @@ public class TestDataCreator
     {
         if( 0 < recipeRepository.count() )
         {
-            System.out.println("Data already exists! No additional test data is created.");
+            log.debug("Data already exists! No additional test data is created.");
             return;
         }
 
         try
         {
+            log.debug("Creating data ...");
             createRecipes();
         }
         catch( final Throwable t )
         {
-            System.err.println(t.getMessage());
+            log.error("An unexpected error has occurred!", t);
         }
     }
 
@@ -98,7 +101,7 @@ public class TestDataCreator
         guacamoleRecipe.setNotes(guacamoleNotes);
 
         final Recipe savedGuacamoleRecipe = recipeRepository.save(guacamoleRecipe);
-        System.out.println(format(TPL_SYSOUT_MSG, savedGuacamoleRecipe.getDescription(), savedGuacamoleRecipe.getId()));
+        log.debug(format(TPL_SYSOUT_MSG, savedGuacamoleRecipe.getDescription(), savedGuacamoleRecipe.getId()));
         /* [/PERFECT_GUACAMOLE] */
 
         /* [SPICY_GRILLED_CHICKEN_TACOS] */
@@ -141,12 +144,13 @@ public class TestDataCreator
         chickenTacosRecipe.setNotes(chickenTacosNotes);
 
         final Recipe savedChickenTacosRecipe = recipeRepository.save(chickenTacosRecipe);
-        System.out.println(format(TPL_SYSOUT_MSG, savedChickenTacosRecipe.getDescription(), savedChickenTacosRecipe.getId()));
+        log.debug(format(TPL_SYSOUT_MSG, savedChickenTacosRecipe.getDescription(), savedChickenTacosRecipe.getId()));
         /* [/SPICY_GRILLED_CHICKEN_TACOS] */
     }
 
     private Category fetchCategory(final String description)
     {
+        log.debug(format("Fetching Category \"{0}\" ...", description));
         final Optional<Category> queryResult = categoryRepository.findByDescription(description);
 
         return queryResult.orElseThrow(() -> new RuntimeException(format("Could not find category \"{0}\"! Check \"data.sql\" script!", description)));
@@ -154,6 +158,7 @@ public class TestDataCreator
 
     private UnitOfMeasure fetchUnitOfMeasure(final String description)
     {
+        log.debug(format("Fetching Unit-Of-Measure \"{0}\" ...", description));
         final Optional<UnitOfMeasure> queryResult = unitOfMeasureRepository.findByDescription(description);
 
         return queryResult.orElseThrow(() -> new RuntimeException(format("Could not find unit-of-measure \"{0}\"! Check \"data.sql\" script!", description)));
