@@ -17,7 +17,7 @@ import guru.springframework.domain.UnitOfMeasure;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest /* Also loads records defined in "src/main/resources/data.sql"! */
-public final class UnitOfMeasureRepositoryIntegrationTest
+public final class UnitOfMeasureRepositoryIntTst
 {
     @Autowired
     private UnitOfMeasureRepository cut;
