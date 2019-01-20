@@ -1,6 +1,9 @@
 package guru.springframework.services;
 
+import static java.text.MessageFormat.format;
+
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -31,5 +34,17 @@ public class RecipeServiceImpl
                         .forEach(recipesSet::add);
 
         return recipesSet;
+    }
+
+    @Override
+    public Recipe fetchById(final Long id)
+    {
+        final Optional<Recipe> findByIdResult = recipeRepository.findById(id);
+        if( findByIdResult.isPresent() == false )
+        {
+            throw new RuntimeException(format("Recipe with ID {0} does not exist!", (id != null ? id.toString() : null)));
+        }
+
+        return findByIdResult.get();
     }
 }

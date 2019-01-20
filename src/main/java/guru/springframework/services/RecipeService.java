@@ -7,4 +7,6 @@ import guru.springframework.domain.Recipe;
 public interface RecipeService
 {
     Set<Recipe> fetchAll();
+
+    Recipe fetchById(Long id);
 }
