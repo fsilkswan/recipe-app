@@ -6,16 +6,17 @@
 <title>Recipe Home</title>
 
 <!-- BOOTSTRAP CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-	crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" crossorigin="anonymous" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.min.css}">
+
+<!-- BOOTSTRAP JavaScript(s) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous" th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" crossorigin="anonymous" th:src="@{/webjars/popper.js/1.14.6/popper.min.js}"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" crossorigin="anonymous" th:src="@{/webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 
 <body>
-
 	<div class="container-fluid" style="margin-top: 20px;">
 		<div class="row justify-content-center">
 			<div class="col-10 col-lg-6">
@@ -31,20 +32,25 @@
 									<tr>
 										<th>ID</th>
 										<th>Description</th>
+										<th>Link</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr th:remove="all">
 										<td>123</td>
 										<td>Tasty Goodness #1</td>
+										<td><a href="https://www.google.com/?123">View</a></td>
 									</tr>
 									<tr th:remove="all">
 										<td>456</td>
 										<td>Tasty Goodness #2</td>
+										<td><a href="https://www.google.com/?456">View</a></td>
 									</tr>
 									<tr th:each="currRecipe : ${recipesList}">
+										<!--/*@thymesVar id="currRecipe" type="guru.springframework.domain.Recipe"*/-->
 										<td th:text="${currRecipe.id}">789</td>
 										<td th:text="${currRecipe.description}">Tasty Goodness #3</td>
+										<td><a href="#" th:href="@{'/recipe/show/' + ${currRecipe.id}}">View</a></td>
 									</tr>
 								</tbody>
 							</table>
