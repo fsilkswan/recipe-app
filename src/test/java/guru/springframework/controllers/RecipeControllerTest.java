@@ -52,6 +52,7 @@ public final class RecipeControllerTest
         mockMvc.perform(get("/recipe/show/1"))
                .andExpect(status().isOk())
                .andExpect(view().name(is(equalTo("recipe/show"))))
+               .andExpect(model().attributeExists("recipe"))
                .andExpect(model().attribute("recipe", is(sameInstance(recipe))));
 
         verify(recipeServiceMock, times(1)).fetchById(eq(1L));
