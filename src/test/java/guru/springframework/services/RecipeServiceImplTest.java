@@ -12,6 +12,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -25,27 +26,26 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import guru.springframework.converters.RecipeDtoToRecipeConverter;
+import guru.springframework.converters.RecipeToRecipeDtoConverter;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 
 public final class RecipeServiceImplTest
 {
-    private static final String RECIPE_DESCR_CHEESEBURGER = "Cheeseburger";
-    private static final String RECIPE_DESCR_HAMBURGER    = "Hamburger";
-
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
     private RecipeServiceImpl cut;
 
-    private Recipe recipe1;
-
-    private Recipe recipe2;
+    @Mock
+    private RecipeDtoToRecipeConverter recipeDtoToRecipeConverter;
 
     @Mock
     private RecipeRepository recipeRepositoryMock;
 
-    private Set<Recipe> recipesData;
+    @Mock
+    private RecipeToRecipeDtoConverter recipeToRecipeDtoConverter;
 
     @Before
     public void beforeEach()
@@ -53,25 +53,28 @@ public final class RecipeServiceImplTest
     {
         MockitoAnnotations.initMocks(this);
 
-        recipe1 = new Recipe();
-        recipe1.setId(1L);
-        recipe1.setDescription(RECIPE_DESCR_HAMBURGER);
-
-        recipe2 = new Recipe();
-        recipe2.setId(2L);
-        recipe2.setDescription(RECIPE_DESCR_CHEESEBURGER);
-
-        recipesData = new HashSet<>();
-        recipesData.add(recipe1);
-        recipesData.add(recipe2);
-
-        cut = new RecipeServiceImpl(recipeRepositoryMock);
+        cut = new RecipeServiceImpl(recipeRepositoryMock, recipeToRecipeDtoConverter, recipeDtoToRecipeConverter);
     }
 
     @Test
     public void testFetchAll()
         throws Exception
     {
+        final Recipe recipe1;
+        recipe1 = new Recipe();
+        recipe1.setId(1L);
+        recipe1.setDescription("Hamburger");
+
+        final Recipe recipe2;
+        recipe2 = new Recipe();
+        recipe2.setId(2L);
+        recipe2.setDescription("Cheeseburger");
+
+        final Set<Recipe> recipesData;
+        recipesData = new HashSet<>();
+        recipesData.add(recipe1);
+        recipesData.add(recipe2);
+
         when(recipeRepositoryMock.findAll()).thenReturn(recipesData);
 
         final Set<Recipe> allRecipes = cut.fetchAll();
@@ -80,20 +83,32 @@ public final class RecipeServiceImplTest
 
         verify(recipeRepositoryMock, times(1)).findAll();
         verify(recipeRepositoryMock, never()).findById(anyLong());
+        verifyZeroInteractions(recipeDtoToRecipeConverter);
+        verifyZeroInteractions(recipeToRecipeDtoConverter);
     }
 
     @Test
     public void testFetchById()
         throws Exception
     {
-        when(recipeRepositoryMock.findById(anyLong())).thenReturn(Optional.of(recipe2));
+        final long id = 3L;
+        final String description = "McRib";
 
-        final Recipe foundRecipe = cut.fetchById(2L);
+        final Recipe recipe;
+        recipe = new Recipe();
+        recipe.setId(id);
+        recipe.setDescription(description);
+
+        when(recipeRepositoryMock.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        final Recipe foundRecipe = cut.fetchById(id);
         assertThat(foundRecipe, is(not(nullValue())));
-        assertThat(foundRecipe.getDescription(), is(equalTo(RECIPE_DESCR_CHEESEBURGER)));
+        assertThat(foundRecipe.getDescription(), is(equalTo(description)));
 
-        verify(recipeRepositoryMock, times(1)).findById(eq(2L));
+        verify(recipeRepositoryMock, times(1)).findById(eq(id));
         verify(recipeRepositoryMock, never()).findAll();
+        verifyZeroInteractions(recipeDtoToRecipeConverter);
+        verifyZeroInteractions(recipeToRecipeDtoConverter);
     }
 
     @Test
@@ -113,6 +128,8 @@ public final class RecipeServiceImplTest
         {
             verify(recipeRepositoryMock, times(1)).findById(isNull());
             verify(recipeRepositoryMock, never()).findAll();
+            verifyZeroInteractions(recipeDtoToRecipeConverter);
+            verifyZeroInteractions(recipeToRecipeDtoConverter);
         }
     }
 
@@ -133,6 +150,8 @@ public final class RecipeServiceImplTest
         {
             verify(recipeRepositoryMock, times(1)).findById(eq(3L));
             verify(recipeRepositoryMock, never()).findAll();
+            verifyZeroInteractions(recipeDtoToRecipeConverter);
+            verifyZeroInteractions(recipeToRecipeDtoConverter);
         }
     }
 }

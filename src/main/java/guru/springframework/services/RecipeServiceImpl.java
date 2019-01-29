@@ -6,8 +6,13 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
+import guru.springframework.converters.RecipeDtoToRecipeConverter;
+import guru.springframework.converters.RecipeToRecipeDtoConverter;
+import guru.springframework.datatransferobjects.RecipeDto;
 import guru.springframework.domain.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +22,17 @@ import lombok.extern.slf4j.Slf4j;
 public class RecipeServiceImpl
     implements RecipeService
 {
-    private final RecipeRepository recipeRepository;
+    private final RecipeDtoToRecipeConverter recipeDtoToRecipeConverter;
+    private final RecipeRepository           recipeRepository;
+    private final RecipeToRecipeDtoConverter recipeToRecipeDtoConverter;
 
-    public RecipeServiceImpl(final RecipeRepository recipeRepository)
+    public RecipeServiceImpl(final RecipeRepository recipeRepository,
+                             /**/final RecipeToRecipeDtoConverter recipeToRecipeDtoConverter,
+                             /**/final RecipeDtoToRecipeConverter recipeDtoToRecipeConverter)
     {
         this.recipeRepository = recipeRepository;
+        this.recipeToRecipeDtoConverter = recipeToRecipeDtoConverter;
+        this.recipeDtoToRecipeConverter = recipeDtoToRecipeConverter;
     }
 
     @Override
@@ -46,5 +57,16 @@ public class RecipeServiceImpl
         }
 
         return findByIdResult.get();
+    }
+
+    @Override
+    @Transactional
+    public RecipeDto saveRecipeDto(final RecipeDto dto)
+    {
+        final Recipe detachedRecipe = recipeDtoToRecipeConverter.convert(dto);
+        final Recipe savedRecipe = recipeRepository.save(detachedRecipe);
+        log.debug(format("Recipe with ID {0} was saved successfully.", savedRecipe.getId().toString()));
+
+        return recipeToRecipeDtoConverter.convert(savedRecipe);
     }
 }
