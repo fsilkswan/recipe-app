@@ -15,7 +15,7 @@ import guru.springframework.domain.Category;
 public final class CategoryToCategoryDtoConverterTest
 {
     private static final String DESCRIPTION = "descript";
-    private static final Long   ID_VALUE    = new Long(1L);
+    private static final Long   ID_VALUE    = Long.valueOf(1L);
 
     private CategoryToCategoryDtoConverter cut;
 
