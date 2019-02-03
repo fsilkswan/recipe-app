@@ -22,6 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -33,6 +34,8 @@ public final class RecipeControllerTest
 {
     private RecipeController cut;
 
+    private MockMvc mockMvc;
+
     @Mock
     private RecipeService recipeServiceMock;
 
@@ -43,24 +46,29 @@ public final class RecipeControllerTest
         MockitoAnnotations.initMocks(this);
 
         cut = new RecipeController(recipeServiceMock);
+
+        mockMvc = MockMvcBuilders.standaloneSetup(cut).build();
     }
 
     @Test
-    public void testProcessRecipeFormPostDataByMockMvc()
+    public void testProcessRecipeFormPostDataForNewRecipeByMockMvc()
         throws Exception
     {
         final RecipeDto recipeDto = new RecipeDto();
         recipeDto.setId(23L);
 
-        when(recipeServiceMock.saveRecipeDto(any(RecipeDto.class))).thenReturn(recipeDto);
+        when(recipeServiceMock.saveRecipeDto(any())).thenReturn(recipeDto);
 
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(cut).build();
-        mockMvc.perform(post("/recipe/saveOrUpdate")/* params? */)
+        mockMvc.perform(post("/recipe/saveOrUpdate")
+                                                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                                    .param("id", "")
+                                                    .param("description", "A New Recipe"))
+               .andExpect(status().is3xxRedirection())
                .andExpect(status().is(302))
-               .andExpect(view().name(is(equalTo("redirect:/recipe/show/23"))))
-               .andExpect(header().string("location", is(equalTo("/recipe/show/23"))));
+               .andExpect(view().name(is(equalTo("redirect:/recipe/23/show"))))
+               .andExpect(header().string("location", is(equalTo("/recipe/23/show"))));
 
-        verify(recipeServiceMock, times(1)).saveRecipeDto(any(RecipeDto.class));
+        verify(recipeServiceMock, times(1)).saveRecipeDto(any());
     }
 
     @Test
@@ -72,8 +80,7 @@ public final class RecipeControllerTest
 
         when(recipeServiceMock.fetchById(anyLong())).thenReturn(recipe);
 
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(cut).build();
-        mockMvc.perform(get("/recipe/show/1"))
+        mockMvc.perform(get("/recipe/1/show"))
                .andExpect(status().isOk())
                .andExpect(view().name(is(equalTo("recipe/show"))))
                .andExpect(model().attributeExists("recipe"))
@@ -83,7 +90,7 @@ public final class RecipeControllerTest
     }
 
     @Test
-    public void testShowRecipeFormByMockMvc()
+    public void testShowRecipeCreationFormByMockMvc()
         throws Exception
     {
         final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(cut).build();
@@ -94,5 +101,22 @@ public final class RecipeControllerTest
                .andExpect(model().attribute("recipeDto", isA(RecipeDto.class)));
 
         verifyZeroInteractions(recipeServiceMock);
+    }
+
+    @Test
+    public void testShowRecipeUpdateFormByMockMvc()
+        throws Exception
+    {
+        final RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(42L);
+
+        when(recipeServiceMock.fetchDtoById(anyLong())).thenReturn(recipeDto);
+
+        mockMvc.perform(get("/recipe/42/update"))
+               .andExpect(status().isOk())
+               .andExpect(view().name(is(equalTo("recipe/recipe_form"))))
+               .andExpect(model().attributeExists("recipeDto"));
+
+        verify(recipeServiceMock, times(1)).fetchDtoById(eq(42L));
     }
 }

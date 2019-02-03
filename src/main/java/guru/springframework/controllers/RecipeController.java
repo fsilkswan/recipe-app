@@ -36,10 +36,10 @@ public class RecipeController
     {
         final RecipeDto savedRecipeDto = recipeService.saveRecipeDto(recipeDto);
 
-        return "redirect:" + "/recipe/show/" + savedRecipeDto.getId();
+        return "redirect:" + "/recipe/" + savedRecipeDto.getId() + "/show";
     }
 
-    @RequestMapping({ "/recipe/show/{id}" })
+    @RequestMapping({ "/recipe/{id}/show" })
     public String showById(@PathVariable final String id, final Model model)
     {
         log.debug("Serving recipe page ...");
@@ -48,5 +48,14 @@ public class RecipeController
         model.addAttribute("recipe", foundRecipe);
 
         return "recipe/show";
+    }
+
+    @RequestMapping({ "/recipe/{id}/update" })
+    public String updateRecipe(@PathVariable final String id, final Model model)
+    {
+        final RecipeDto recipeDto = recipeService.fetchDtoById(Long.valueOf(id));
+        model.addAttribute("recipeDto", recipeDto);
+
+        return "recipe/recipe_form";
     }
 }

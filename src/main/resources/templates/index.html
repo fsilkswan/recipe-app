@@ -17,6 +17,8 @@
 </head>
 
 <body>
+	<!--/*@thymesVar id="recipesList" type="java.util.List"*/-->
+	<!--/*@thymesVar id="currRecipe" type="guru.springframework.domain.Recipe"*/-->
 	<div class="container-fluid" style="margin-top: 20px;">
 		<div class="row justify-content-center">
 			<div class="col-10 col-lg-6">
@@ -32,25 +34,28 @@
 									<tr>
 										<th>ID</th>
 										<th>Description</th>
-										<th>Link</th>
+										<th>View-Link</th>
+										<th>Edit-Link</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr th:remove="all">
 										<td>123</td>
 										<td>Tasty Goodness #1</td>
-										<td><a href="https://www.google.com/?123">View</a></td>
+										<td><a href="https://www.google.com/?123&show">View</a></td>
+										<td><a href="https://www.google.com/?123&edit">Edit</a></td>
 									</tr>
 									<tr th:remove="all">
 										<td>456</td>
 										<td>Tasty Goodness #2</td>
-										<td><a href="https://www.google.com/?456">View</a></td>
+										<td><a href="https://www.google.com/?456&show">View</a></td>
+										<td><a href="https://www.google.com/?456&edit">Edit</a></td>
 									</tr>
 									<tr th:each="currRecipe : ${recipesList}">
-										<!--/*@thymesVar id="currRecipe" type="guru.springframework.domain.Recipe"*/-->
 										<td th:text="${currRecipe.id}">789</td>
 										<td th:text="${currRecipe.description}">Tasty Goodness #3</td>
-										<td><a href="#" th:href="@{'/recipe/show/' + ${currRecipe.id}}">View</a></td>
+										<td><a href="#" th:href="@{'/recipe/' + ${currRecipe.id} + '/show'}">View</a></td>
+										<td><a href="#" th:href="@{'/recipe/' + ${currRecipe.id} + '/update'}">Edit</a></td>
 									</tr>
 								</tbody>
 							</table>

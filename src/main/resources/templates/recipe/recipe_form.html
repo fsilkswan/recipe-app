@@ -94,7 +94,7 @@
 										<li th:remove="all">1 Teaspoon of chocolate</li>
 										<li th:each="currIngredient : ${recipeDto.ingredients}"
 											th:text="${(currIngredient.getAmount() +
-										' ' + currIngredient.uom.getDescription() +
+										' ' + currIngredient.unitOfMeasure.getDescription() +
 										' - ' + currIngredient.getDescription())}">1 Teaspoon of sugar</li>
 									</ul>
 								</div>

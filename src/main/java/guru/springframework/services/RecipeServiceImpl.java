@@ -36,6 +36,7 @@ public class RecipeServiceImpl
     }
 
     @Override
+    @Transactional
     public Set<Recipe> fetchAll()
     {
         log.debug("I'm in the service - Sponsored by Project Lombok");
@@ -48,6 +49,7 @@ public class RecipeServiceImpl
     }
 
     @Override
+    @Transactional
     public Recipe fetchById(final Long id)
     {
         final Optional<Recipe> findByIdResult = recipeRepository.findById(id);
@@ -57,6 +59,13 @@ public class RecipeServiceImpl
         }
 
         return findByIdResult.get();
+    }
+
+    @Override
+    @Transactional
+    public RecipeDto fetchDtoById(final Long id)
+    {
+        return recipeToRecipeDtoConverter.convert(fetchById(id));
     }
 
     @Override
