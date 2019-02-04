@@ -1,11 +1,13 @@
 package guru.springframework.controllers;
 
+import static java.text.MessageFormat.format;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import guru.springframework.datatransferobjects.RecipeDto;
 import guru.springframework.domain.Recipe;
@@ -23,7 +25,17 @@ public class RecipeController
         this.recipeService = recipeService;
     }
 
-    @RequestMapping({ "/recipe/new" })
+    @GetMapping({ "/recipe/{id}/delete" })
+    public String deleteRecipe(@PathVariable final String id)
+    {
+        log.debug(format("Trying to delete recipe with ID {0} ...", id));
+        recipeService.deleteById(Long.valueOf(id));
+        log.debug(format("Successfully deleted recipe with ID {0}!", id));
+
+        return "redirect:/";
+    }
+
+    @GetMapping({ "/recipe/new" })
     public String newRecipe(final Model model)
     {
         model.addAttribute("recipeDto", new RecipeDto());
@@ -39,7 +51,7 @@ public class RecipeController
         return "redirect:" + "/recipe/" + savedRecipeDto.getId() + "/show";
     }
 
-    @RequestMapping({ "/recipe/{id}/show" })
+    @GetMapping({ "/recipe/{id}/show" })
     public String showById(@PathVariable final String id, final Model model)
     {
         log.debug("Serving recipe page ...");
@@ -50,7 +62,7 @@ public class RecipeController
         return "recipe/show";
     }
 
-    @RequestMapping({ "/recipe/{id}/update" })
+    @GetMapping({ "/recipe/{id}/update" })
     public String updateRecipe(@PathVariable final String id, final Model model)
     {
         final RecipeDto recipeDto = recipeService.fetchDtoById(Long.valueOf(id));

@@ -37,6 +37,13 @@ public class RecipeServiceImpl
 
     @Override
     @Transactional
+    public void deleteById(final Long id)
+    {
+        recipeRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
     public Set<Recipe> fetchAll()
     {
         log.debug("I'm in the service - Sponsored by Project Lombok");

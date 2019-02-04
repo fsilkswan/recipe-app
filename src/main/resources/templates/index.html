@@ -36,6 +36,7 @@
 										<th>Description</th>
 										<th>View-Link</th>
 										<th>Edit-Link</th>
+										<th>Delete-Link</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -44,18 +45,21 @@
 										<td>Tasty Goodness #1</td>
 										<td><a href="https://www.google.com/?123&show">View</a></td>
 										<td><a href="https://www.google.com/?123&edit">Edit</a></td>
+										<td><a href="https://www.google.com/?123&delete">Delete</a></td>
 									</tr>
 									<tr th:remove="all">
 										<td>456</td>
 										<td>Tasty Goodness #2</td>
 										<td><a href="https://www.google.com/?456&show">View</a></td>
 										<td><a href="https://www.google.com/?456&edit">Edit</a></td>
+										<td><a href="https://www.google.com/?456&delete">Delete</a></td>
 									</tr>
 									<tr th:each="currRecipe : ${recipesList}">
 										<td th:text="${currRecipe.id}">789</td>
 										<td th:text="${currRecipe.description}">Tasty Goodness #3</td>
 										<td><a href="#" th:href="@{'/recipe/' + ${currRecipe.id} + '/show'}">View</a></td>
 										<td><a href="#" th:href="@{'/recipe/' + ${currRecipe.id} + '/update'}">Edit</a></td>
+										<td><a href="#" th:href="@{'/recipe/' + ${currRecipe.id} + '/delete'}">Delete</a></td>
 									</tr>
 								</tbody>
 							</table>
