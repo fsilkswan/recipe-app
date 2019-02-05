@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -72,17 +73,21 @@ public final class IngredientServiceImplTest
         verify(recipeRepositoryMock, times(1)).findById(anyLong());
     }
 
+    @Ignore
     @Test
     public void testFetchByRecipeIdAndIngredientIdFailsForInvalidIngredientId()
         throws Exception
     {
+        // TODO
         fail("Not yet implemented!");
     }
 
+    @Ignore
     @Test
     public void testFetchByRecipeIdAndIngredientIdFailsForInvalidRecipeId()
         throws Exception
     {
+        // TODO
         fail("Not yet implemented!");
     }
 }
