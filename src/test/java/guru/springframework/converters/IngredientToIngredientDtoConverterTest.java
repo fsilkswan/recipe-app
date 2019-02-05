@@ -67,7 +67,7 @@ public final class IngredientToIngredientDtoConverterTest
         assertThat(ingredientDto.getAmount(), is(equalTo(AMOUNT)));
         assertThat(ingredientDto.getDescription(), is(equalTo(DESCRIPTION)));
         assertThat(ingredientDto.getUnitOfMeasure(), is(nullValue()));
-        // assertThat(ingredientDto.get, is(equalTo(RECIPE));
+        assertThat(ingredientDto.getRecipeId(), is(equalTo(RECIPE.getId())));
     }
 
     @Test
@@ -93,6 +93,6 @@ public final class IngredientToIngredientDtoConverterTest
         assertThat(ingredientDto.getDescription(), is(equalTo(DESCRIPTION)));
         assertThat(ingredientDto.getUnitOfMeasure(), is(not(nullValue())));
         assertThat(ingredientDto.getUnitOfMeasure().getId(), is(equalTo(UOM_ID)));
-        // assertThat(ingredientDto.get, is(equalTo(RECIPE));
+        assertThat(ingredientDto.getRecipeId(), is(equalTo(RECIPE.getId())));
     }
 }

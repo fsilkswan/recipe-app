@@ -2,6 +2,7 @@ package guru.springframework.controllers;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,12 +19,17 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import guru.springframework.datatransferobjects.IngredientDto;
 import guru.springframework.datatransferobjects.RecipeDto;
+import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
 
 public final class IngredientControllerTest
 {
     private IngredientController cut;
+
+    @Mock
+    private IngredientService ingredientServiceMock;
 
     private MockMvc mockMvc;
 
@@ -36,7 +42,7 @@ public final class IngredientControllerTest
     {
         MockitoAnnotations.initMocks(this);
 
-        cut = new IngredientController(recipeServiceMock);
+        cut = new IngredientController(recipeServiceMock, ingredientServiceMock);
 
         mockMvc = MockMvcBuilders.standaloneSetup(cut).build();
     }
@@ -53,9 +59,28 @@ public final class IngredientControllerTest
         mockMvc.perform(get("/recipe/1/ingredients"))
                .andExpect(status().isOk())
                .andExpect(view().name(is(equalTo("recipe/ingredient/list"))))
-               .andExpect(model().attributeExists("recipeDto"));
+               .andExpect(model().attributeExists("recipeDto"))
+               .andExpect(model().attribute("recipeDto", is(sameInstance(recipeDto))));
 
         // THEN:
         verify(recipeServiceMock, times(1)).fetchDtoById(anyLong());
+    }
+
+    @Test
+    public void testShowIngredient()
+        throws Exception
+    {
+        // GIVEN:
+        final IngredientDto ingredientDto = new IngredientDto();
+
+        // WHEN:
+        when(ingredientServiceMock.fetchByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(ingredientDto);
+
+        // THEN:
+        mockMvc.perform(get("/recipe/1/ingredient/2/show"))
+               .andExpect(status().isOk())
+               .andExpect(view().name(is(equalTo("recipe/ingredient/show"))))
+               .andExpect(model().attributeExists("ingredientDto"))
+               .andExpect(model().attribute("ingredientDto", is(sameInstance(ingredientDto))));
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import guru.springframework.datatransferobjects.IngredientDto;
 import guru.springframework.datatransferobjects.UnitOfMeasureDto;
 import guru.springframework.domain.Ingredient;
+import guru.springframework.domain.Recipe;
 import lombok.Synchronized;
 
 @Component
@@ -37,6 +38,12 @@ public class IngredientToIngredientDtoConverter
 
         final UnitOfMeasureDto uomDto = unitOfMeasureToUnitOfMeasureDtoConverter.convert(source.getUnitOfMeasure());
         ingredientDto.setUnitOfMeasure(uomDto);
+
+        final Recipe recipe = source.getRecipe();
+        if( recipe != null )
+        {
+            ingredientDto.setRecipeId(recipe.getId());
+        }
 
         return ingredientDto;
     }
