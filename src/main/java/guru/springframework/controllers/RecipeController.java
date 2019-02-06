@@ -35,20 +35,12 @@ public class RecipeController
         return "redirect:/";
     }
 
-    @GetMapping({ "/recipe/new" })
-    public String newRecipe(final Model model)
-    {
-        model.addAttribute("recipeDto", new RecipeDto());
-
-        return "recipe/recipe_form";
-    }
-
     @PostMapping({ "/recipe/saveOrUpdate" })
     public String saveOrUpdate(@ModelAttribute final RecipeDto recipeDto)
     {
         final RecipeDto savedRecipeDto = recipeService.saveRecipeDto(recipeDto);
 
-        return "redirect:" + "/recipe/" + savedRecipeDto.getId() + "/show";
+        return "redirect:/" + "recipe/" + savedRecipeDto.getId() + "/show";
     }
 
     @GetMapping({ "/recipe/{id}/show" })
@@ -62,10 +54,20 @@ public class RecipeController
         return "recipe/show";
     }
 
-    @GetMapping({ "/recipe/{id}/update" })
-    public String updateRecipe(@PathVariable final String id, final Model model)
+    @GetMapping({ "/recipe/new" })
+    public String showRecipeCreationForm(final Model model)
     {
-        final RecipeDto recipeDto = recipeService.fetchDtoById(Long.valueOf(id));
+        return showRecipeForm(model, new RecipeDto());
+    }
+
+    @GetMapping({ "/recipe/{id}/update" })
+    public String showRecipeUpdateForm(@PathVariable final String id, final Model model)
+    {
+        return showRecipeForm(model, recipeService.fetchDtoById(Long.valueOf(id)));
+    }
+
+    private String showRecipeForm(final Model model, final RecipeDto recipeDto)
+    {
         model.addAttribute("recipeDto", recipeDto);
 
         return "recipe/recipe_form";

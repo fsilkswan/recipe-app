@@ -5,4 +5,6 @@ import guru.springframework.datatransferobjects.IngredientDto;
 public interface IngredientService
 {
     IngredientDto fetchByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
+
+    IngredientDto saveIngredientDto(IngredientDto ingredientDto);
 }

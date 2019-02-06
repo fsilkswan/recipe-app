@@ -63,7 +63,7 @@ public final class RecipeControllerTest
     }
 
     @Test
-    public void testProcessRecipeFormPostDataForNewRecipeUsingMockMvc()
+    public void testSaveOrUpdate()
         throws Exception
     {
         final RecipeDto recipeDto = new RecipeDto();
@@ -84,38 +84,7 @@ public final class RecipeControllerTest
     }
 
     @Test
-    public void testShowRecipeCreationFormUsingMockMvc()
-        throws Exception
-    {
-        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(cut).build();
-        mockMvc.perform(get("/recipe/new"))
-               .andExpect(status().isOk())
-               .andExpect(view().name(is(equalTo("recipe/recipe_form"))))
-               .andExpect(model().attributeExists("recipeDto"))
-               .andExpect(model().attribute("recipeDto", isA(RecipeDto.class)));
-
-        verifyZeroInteractions(recipeServiceMock);
-    }
-
-    @Test
-    public void testShowRecipeUpdateFormUsingMockMvc()
-        throws Exception
-    {
-        final RecipeDto recipeDto = new RecipeDto();
-        recipeDto.setId(42L);
-
-        when(recipeServiceMock.fetchDtoById(anyLong())).thenReturn(recipeDto);
-
-        mockMvc.perform(get("/recipe/42/update"))
-               .andExpect(status().isOk())
-               .andExpect(view().name(is(equalTo("recipe/recipe_form"))))
-               .andExpect(model().attributeExists("recipeDto"));
-
-        verify(recipeServiceMock, times(1)).fetchDtoById(eq(42L));
-    }
-
-    @Test
-    public void testShowRecipeUsingMockMvc()
+    public void testShowRecipe()
         throws Exception
     {
         final Recipe recipe = new Recipe();
@@ -130,5 +99,36 @@ public final class RecipeControllerTest
                .andExpect(model().attribute("recipe", is(sameInstance(recipe))));
 
         verify(recipeServiceMock, times(1)).fetchById(eq(1L));
+    }
+
+    @Test
+    public void testShowRecipeCreationForm()
+        throws Exception
+    {
+        final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(cut).build();
+        mockMvc.perform(get("/recipe/new"))
+               .andExpect(status().isOk())
+               .andExpect(view().name(is(equalTo("recipe/recipe_form"))))
+               .andExpect(model().attributeExists("recipeDto"))
+               .andExpect(model().attribute("recipeDto", isA(RecipeDto.class)));
+
+        verifyZeroInteractions(recipeServiceMock);
+    }
+
+    @Test
+    public void testShowRecipeUpdateForm()
+        throws Exception
+    {
+        final RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(42L);
+
+        when(recipeServiceMock.fetchDtoById(anyLong())).thenReturn(recipeDto);
+
+        mockMvc.perform(get("/recipe/42/update"))
+               .andExpect(status().isOk())
+               .andExpect(view().name(is(equalTo("recipe/recipe_form"))))
+               .andExpect(model().attributeExists("recipeDto"));
+
+        verify(recipeServiceMock, times(1)).fetchDtoById(eq(42L));
     }
 }
