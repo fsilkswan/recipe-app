@@ -70,7 +70,7 @@ public final class IngredientControllerTest
         ingredientDto.setRecipeId(2L);
 
         // WHEN:
-        when(ingredientServiceMock.saveIngredientDto(any(IngredientDto.class))).thenReturn(ingredientDto);
+        when(ingredientServiceMock.saveOrUpdateIngredientDto(any(IngredientDto.class))).thenReturn(ingredientDto);
 
         // THEN:
         mockMvc.perform(post("/recipe/2/ingredient/saveOrUpdate")

@@ -39,7 +39,7 @@ public class IngredientController
     @PostMapping({ "/recipe/{recipeId}/ingredient/saveOrUpdate" })
     public String saveOrUpdate(@PathVariable final String recipeId, @ModelAttribute final IngredientDto ingredientDto)
     {
-        final IngredientDto savedIngredientDto = ingredientService.saveIngredientDto(ingredientDto);
+        final IngredientDto savedIngredientDto = ingredientService.saveOrUpdateIngredientDto(ingredientDto);
 
         return "redirect:/" + "recipe/" + savedIngredientDto.getRecipeId() + "/ingredient/" + savedIngredientDto.getId() + "/show";
     }
