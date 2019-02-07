@@ -1,6 +1,7 @@
 package guru.springframework.controllers;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
@@ -99,6 +100,29 @@ public final class IngredientControllerTest
                .andExpect(model().attribute("ingredientDto", is(sameInstance(ingredientDto))));
 
         verify(ingredientServiceMock, times(1)).fetchByRecipeIdAndIngredientId(eq(1L), eq(2L));
+    }
+
+    @Test
+    public void testShowIngredientCreationForm()
+        throws Exception
+    {
+        // GIVEN:
+        final RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setId(1L);
+
+        // WHEN:
+        when(recipeServiceMock.fetchDtoById(anyLong())).thenReturn(recipeDto);
+        when(unitOfMeasureServiceMock.fetchAllAsDto()).thenReturn(emptyList());
+
+        // THEN:
+        mockMvc.perform(get("/recipe/1/ingredient/new"))
+               .andExpect(status().isOk())
+               .andExpect(view().name(is(equalTo("recipe/ingredient/ingredient_form"))))
+               .andExpect(model().attributeExists("ingredientDto"))
+               .andExpect(model().attributeExists("uomDtoList"));
+
+        verify(recipeServiceMock, times(1)).fetchDtoById(eq(1L));
+        verify(unitOfMeasureServiceMock, times(1)).fetchAllAsDto();
     }
 
     @Test
