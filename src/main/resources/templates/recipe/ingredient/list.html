@@ -25,7 +25,12 @@
 				<!-- <div class="panel-group"> -->
 				<div class="card">
 					<div class="card-header bg-primary text-light">
+						<div class="col-md-11">
 						<h1 class="card-title" th:text="@{'Ingredients for &quot;' + ${recipeDto.description} + '&quot;'}">Ingredients</h1>
+						</div>
+						<div class="col-md-1">
+							<a class="btn btn-secondary" href="#" th:href="@{'/recipe/' + ${recipeDto.id} + '/ingredient/new'}" role="button">New</a>
+						</div>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive" th:if="${not #lists.isEmpty(recipeDto.ingredients)}">
