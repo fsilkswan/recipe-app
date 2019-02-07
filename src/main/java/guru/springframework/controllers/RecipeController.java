@@ -55,18 +55,20 @@ public class RecipeController
     }
 
     @GetMapping({ "/recipe/new" })
-    public String showRecipeCreationForm(final Model model)
+    public String showFormRecipeCreation(final Model model)
     {
-        return showRecipeForm(model, new RecipeDto());
+        final RecipeDto recipeDto = new RecipeDto();
+        return showForm(model, recipeDto);
     }
 
     @GetMapping({ "/recipe/{id}/update" })
-    public String showRecipeUpdateForm(@PathVariable final String id, final Model model)
+    public String showFormRecipeUpdate(@PathVariable final String id, final Model model)
     {
-        return showRecipeForm(model, recipeService.fetchDtoById(Long.valueOf(id)));
+        final RecipeDto recipeDto = recipeService.fetchDtoById(Long.valueOf(id));
+        return showForm(model, recipeDto);
     }
 
-    private String showRecipeForm(final Model model, final RecipeDto recipeDto)
+    private String showForm(final Model model, final RecipeDto recipeDto)
     {
         model.addAttribute("recipeDto", recipeDto);
 
