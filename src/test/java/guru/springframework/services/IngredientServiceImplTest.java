@@ -108,7 +108,7 @@ public final class IngredientServiceImplTest
     }
 
     @Test
-    public void testSaveIngredientDtoAddNew()
+    public void testSaveOrUpdateIngredientDtoAddNew()
         throws Exception
     {
         // GIVEN:
@@ -116,7 +116,6 @@ public final class IngredientServiceImplTest
         unitOfMeasureDto.setId(3L);
 
         final IngredientDto ingredientDto = new IngredientDto();
-        ingredientDto.setId(2L); // FIXME: ID should not be set on DTO for NEW ingredient!
         ingredientDto.setDescription("My Description");
         ingredientDto.setAmount(BigDecimal.valueOf(1.5));
         ingredientDto.setUnitOfMeasure(unitOfMeasureDto);
@@ -131,7 +130,7 @@ public final class IngredientServiceImplTest
         when(recipeRepositoryMock.save(any(Recipe.class))).thenReturn(savedRecipe);
 
         // WHEN:
-        final IngredientDto savedIngredientDto = cut.saveIngredientDto(ingredientDto);
+        final IngredientDto savedIngredientDto = cut.saveOrUpdateIngredientDto(ingredientDto);
 
         // THEN:
         assertThat(savedIngredientDto, is(not(nullValue())));
@@ -146,7 +145,7 @@ public final class IngredientServiceImplTest
     }
 
     @Test
-    public void testSaveIngredientDtoUpdateExisting()
+    public void testSaveOrUpdateIngredientDtoUpdateExisting()
         throws Exception
     {
         // GIVEN:
@@ -174,7 +173,7 @@ public final class IngredientServiceImplTest
         when(recipeRepositoryMock.save(any(Recipe.class))).thenReturn(recipe);
 
         // WHEN:
-        final IngredientDto savedIngredientDto = cut.saveIngredientDto(ingredientDto);
+        final IngredientDto savedIngredientDto = cut.saveOrUpdateIngredientDto(ingredientDto);
 
         // THEN:
         assertThat(savedIngredientDto, is(not(nullValue())));

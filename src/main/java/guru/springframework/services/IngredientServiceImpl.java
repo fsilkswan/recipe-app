@@ -68,7 +68,7 @@ public class IngredientServiceImpl
 
     @Override
     @Transactional
-    public IngredientDto saveIngredientDto(final IngredientDto ingredientDto)
+    public IngredientDto saveOrUpdateIngredientDto(final IngredientDto ingredientDto)
     {
         final Long recipeId = ingredientDto.getRecipeId();
         final Optional<Recipe> recipeByIdResult = recipeRepository.findById(recipeId);
@@ -95,16 +95,27 @@ public class IngredientServiceImpl
         else
         {
             // ADD NEW INGREDIENT:
-            recipe.addIngredient(ingredientDtoToIngredientConverter.convert(ingredientDto));
+            final Ingredient newIngredient = ingredientDtoToIngredientConverter.convert(ingredientDto);
+            newIngredient.setRecipe(recipe);
+            recipe.addIngredient(newIngredient);
         }
 
         final Recipe savedRecipe = recipeRepository.save(recipe);
+        final Optional<Ingredient> savedIngredientOptional = savedRecipe.getIngredients().stream()
+                                                                        .filter(currIngredient -> currIngredient.getId().equals(ingredientDto.getId()))
+                                                                        .findFirst();
 
-        // TODO: Check for fail!
+        if( savedIngredientOptional.isPresent() == true )
+        {
+            // TODO: Check for fail!
+            return ingredientToIngredientDtoConverter.convert(savedIngredientOptional.get());
+        }
+
         return ingredientToIngredientDtoConverter.convert(savedRecipe.getIngredients().stream()
-                                                                     /* FIXME: Filter will no work for adding a new ingredient, because ingredientDto.getId() should be null! */
-                                                                     .filter(currIngredient -> currIngredient.getId().equals(ingredientDto.getId()))
-                                                                     .findFirst()
-                                                                     .get());
+                                                                     /* Not totally save, but best guess ... */
+                                                                     .filter(currIngredient -> currIngredient.getDescription().equals(ingredientDto.getDescription()))
+                                                                     .filter(currIngredient -> currIngredient.getAmount().equals(ingredientDto.getAmount()))
+                                                                     .filter(currIngredient -> currIngredient.getUnitOfMeasure().getId().equals(ingredientDto.getUnitOfMeasure().getId()))
+                                                                     .findFirst().get());
     }
 }
