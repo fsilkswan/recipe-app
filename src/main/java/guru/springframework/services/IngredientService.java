@@ -6,5 +6,5 @@ public interface IngredientService
 {
     IngredientDto fetchByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
 
-    IngredientDto saveIngredientDto(IngredientDto ingredientDto);
+    IngredientDto saveOrUpdateIngredientDto(IngredientDto ingredientDto);
 }
