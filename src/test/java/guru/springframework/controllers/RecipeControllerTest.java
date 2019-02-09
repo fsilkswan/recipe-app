@@ -51,7 +51,7 @@ public final class RecipeControllerTest
     }
 
     @Test
-    public void testDeleteRecipeByIdUsingMockMvc()
+    public void testDeleteRecipeById()
         throws Exception
     {
         mockMvc.perform(get("/recipe/2/delete"))

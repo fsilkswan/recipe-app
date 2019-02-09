@@ -3,6 +3,7 @@ package guru.springframework.services;
 import static java.text.MessageFormat.format;
 
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -36,6 +37,35 @@ public class IngredientServiceImpl
         this.ingredientToIngredientDtoConverter = ingredientToIngredientDtoConverter;
         this.ingredientDtoToIngredientConverter = ingredientDtoToIngredientConverter;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(final Long recipeId, final Long ingredientId)
+    {
+        final Optional<Recipe> recipeOptional = recipeRepository.findById(Long.valueOf(recipeId));
+        if( recipeOptional.isPresent() == false )
+        {
+            log.debug(format("Recipe with ID {0} does not exist!", recipeId));
+            return;
+        }
+
+        final Recipe recipe = recipeOptional.get();
+        final Set<Ingredient> allIngredients = recipe.getIngredients();
+        final Optional<Ingredient> ingredientOptional = allIngredients.stream()
+                                                                      .filter(currIngredient -> Long.valueOf(ingredientId).equals(currIngredient.getId()))
+                                                                      .findFirst();
+        if( ingredientOptional.isPresent() == false )
+        {
+            log.debug(format("Recipe with ID {0} does not have an ingredient with ID {1}!", recipeId, ingredientId));
+            return;
+        }
+
+        final Ingredient ingredientToDel = ingredientOptional.get();
+        ingredientToDel.setRecipe(null);
+
+        allIngredients.remove(ingredientToDel);
+        recipeRepository.save(recipe);
     }
 
     @Override

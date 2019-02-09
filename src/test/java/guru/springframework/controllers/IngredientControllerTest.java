@@ -61,6 +61,23 @@ public final class IngredientControllerTest
     }
 
     @Test
+    public void testDeleteById()
+        throws Exception
+    {
+        // GIVEN:
+        // Nothing given.
+
+        // WHEN:
+        mockMvc.perform(get("/recipe/1/ingredient/2/delete"))
+               .andExpect(status().is3xxRedirection())
+               .andExpect(status().is(equalTo(302)))
+               .andExpect(view().name(is(equalTo("redirect:/recipe/1/ingredients"))));
+
+        // THEN:
+        verify(ingredientServiceMock, times(1)).deleteById(eq(1L), eq(2L));
+    }
+
+    @Test
     public void testSaveOrUpdate()
         throws Exception
     {

@@ -13,6 +13,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -56,6 +57,29 @@ public final class IngredientServiceImplTest
                                         /**/ new IngredientToIngredientDtoConverter(new UnitOfMeasureToUnitOfMeasureDtoConverter()),
                                         /**/ new IngredientDtoToIngredientConverter(new UnitOfMeasureDtoToUnitOfMeasureConverter()),
                                         /**/ unitOfMeasureRepositoryMock);
+    }
+
+    @Test
+    public void testDeleteById()
+        throws Exception
+    {
+        // GIVEN:
+        final Ingredient ingredientToDelete = new Ingredient();
+        ingredientToDelete.setId(2L);
+
+        final Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        recipe.addIngredient(ingredientToDelete);
+
+        when(recipeRepositoryMock.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        // WHEN:
+        cut.deleteById(1L, 2L);
+
+        // THEN:
+        verify(recipeRepositoryMock, times(1)).findById(eq(1L));
+        verify(recipeRepositoryMock, times(1)).save(same(recipe));
+        verifyZeroInteractions(unitOfMeasureRepositoryMock);
     }
 
     @Test

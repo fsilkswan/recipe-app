@@ -36,8 +36,18 @@ public class IngredientController
         this.unitOfMeasureService = unitOfMeasureService;
     }
 
+    @GetMapping({ "/recipe/{recipeId}/ingredient/{ingredientId}/delete" })
+    public String deleteIngredient(@PathVariable final String recipeId, @PathVariable final String ingredientId)
+    {
+        log.info(format("Trying to delete ingredient with ID {1} from recipe with ID {0} ...", recipeId, ingredientId));
+        ingredientService.deleteById(Long.valueOf(recipeId), Long.valueOf(ingredientId));
+        log.info(format("Successfully deleted ingredient with ID {1} from recipe with ID {0}.", recipeId, ingredientId));
+
+        return "redirect:/" + "recipe/" + recipeId + "/ingredients";
+    }
+
     @PostMapping({ "/recipe/{recipeId}/ingredient/saveOrUpdate" })
-    public String saveOrUpdate(@PathVariable final String recipeId, @ModelAttribute final IngredientDto ingredientDto)
+    public String saveOrUpdate(@ModelAttribute final IngredientDto ingredientDto)
     {
         final IngredientDto savedIngredientDto = ingredientService.saveOrUpdateIngredientDto(ingredientDto);
 
@@ -99,4 +109,5 @@ public class IngredientController
 
         return "recipe/ingredient/ingredient_form";
     }
+
 }
