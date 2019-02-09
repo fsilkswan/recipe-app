@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import guru.springframework.domain.Recipe;
 import guru.springframework.services.RecipeService;
@@ -21,7 +21,7 @@ public class IndexController
         this.recipeService = recipeService;
     }
 
-    @RequestMapping({ "", "/", "index" })
+    @GetMapping({ "", "/", "index" })
     public String getIndexPage(final Model model)
     {
         log.debug("Serving the index page ...");
