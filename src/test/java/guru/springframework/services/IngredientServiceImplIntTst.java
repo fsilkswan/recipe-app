@@ -17,33 +17,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import guru.springframework.converters.IngredientDtoToIngredientConverter;
-import guru.springframework.converters.IngredientToIngredientDtoConverter;
 import guru.springframework.domain.Ingredient;
 import guru.springframework.repositories.RecipeRepository;
-import guru.springframework.repositories.UnitOfMeasureRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public final class IngredientServiceImplIntTst
 {
     @Autowired
-    IngredientService cut;
+    private IngredientService cut;
 
     @Autowired
-    IngredientDtoToIngredientConverter ingredientDtoToIngredientConverter;
+    private IngredientRepository ingredientRepository;
 
     @Autowired
-    IngredientRepository ingredientRepository;
-
-    @Autowired
-    IngredientToIngredientDtoConverter ingredientToIngredientDtoConverter;
-
-    @Autowired
-    RecipeRepository recipeRepository;
-
-    @Autowired
-    UnitOfMeasureRepository unitOfMeasureRepository;
+    private RecipeRepository recipeRepository;
 
     @Test
     @Transactional

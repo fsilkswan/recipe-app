@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import guru.springframework.converters.RecipeDtoToRecipeConverter;
 import guru.springframework.converters.RecipeToRecipeDtoConverter;
 import guru.springframework.datatransferobjects.RecipeDto;
 import guru.springframework.domain.Recipe;
@@ -26,16 +25,13 @@ public class RecipeServiceIntTst
     private static final String NEW_DESCRIPTION = "New Description";
 
     @Autowired
-    RecipeService cut;
+    private RecipeService cut;
 
     @Autowired
-    RecipeDtoToRecipeConverter recipeDtoToRecipeConverter;
+    private RecipeRepository recipeRepository;
 
     @Autowired
-    RecipeRepository recipeRepository;
-
-    @Autowired
-    RecipeToRecipeDtoConverter recipeToRecipeDtoConverter;
+    private RecipeToRecipeDtoConverter recipeToRecipeDtoConverter;
 
     @Test
     @Transactional
