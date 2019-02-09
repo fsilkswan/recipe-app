@@ -92,7 +92,7 @@
 				<!-- <version>2.20</version> -->
 				<configuration>
 					<includes>
-						<include>**/*IntTst.java</include>
+						<include>**/*IntTst</include>
 					</includes>
 					<!-- <additionalClasspathElements> -->
 					<!-- <additionalClasspathElement>${basedir}/target/classes</additionalClasspathElement> -->
