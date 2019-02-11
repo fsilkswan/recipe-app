@@ -97,7 +97,7 @@
 					<includes>
 						<include>**/*IntTst.java</include>
 					</includes>
-					<useSystemClassLoader>false</useSystemClassLoader>
+					<!-- <useSystemClassLoader>false</useSystemClassLoader> -->
 					<parallel>none</parallel>
 				</configuration>
 				<executions>
