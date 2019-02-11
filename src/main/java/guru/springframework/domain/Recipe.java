@@ -48,7 +48,7 @@ public final class Recipe
     @Lob /* Stored in BLOB on DB side. */
     private Byte[] image;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe"/* , orphanRemoval = true */)
     private Set<Ingredient> ingredients = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)

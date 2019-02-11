@@ -30,7 +30,8 @@ public final class Ingredient
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne /* (fetch = FetchType.LAZY) */
+    // @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
     @OneToOne(fetch = FetchType.EAGER/* Show the intent although this is default for One-To-One in Hibernate. */)

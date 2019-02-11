@@ -20,7 +20,7 @@ import guru.springframework.repositories.RecipeRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RecipeServiceIntTst
+public final class RecipeServiceIntTst
 {
     private static final String NEW_DESCRIPTION = "New Description";
 
