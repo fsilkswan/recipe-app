@@ -19,24 +19,34 @@
 
 <body>
 	<div class="container-fluid" style="margin-top: 20px">
-		<div class="row">
+		<div class="row justify-content-center">
 			<div class="col-md-6 col-md-offset-3">
 				<!-- 				<div class="panel-group"> -->
 				<div class="card">
 					<div class="card-header bg-primary text-light">
-						<h1 class="card-title" th:text="${recipe.description}">Recipe Description Here!</h1>
+						<div class="row">
+							<div class="col-md-9">
+								<h1 class="card-title" th:text="${recipe.description}">Recipe Description Here!</h1>
+							</div>
+							<div class="col-md-3">
+								<a class="btn btn-secondary" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/image_upload_form'}" role="button">Change Image</a>
+							</div>
+						</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
 							<div class="col-md-3">
 								<h5>Categories:</h5>
 							</div>
-							<div class="col-md-9">
+							<div class="col-md-3">
 								<ul>
 									<li th:remove="all">cat one</li>
 									<li th:remove="all">cat two</li>
 									<li th:each="category : ${recipe.categories}" th:text="${category.getDescription()}">cat three</li>
 								</ul>
+							</div>
+							<div class="col-md-6">
+								<img src="../../static/images/perfect_guacamole_flashed.jpg" width="200px" height="200px" th:src="@{'/images/perfect_guacamole.jpg'}">
 							</div>
 						</div>
 						<div class="row">
@@ -88,10 +98,10 @@
 				<div class="card">
 					<div class="card-header bg-primary text-light">
 						<div class="row">
-							<div class="col-md-11 ">
+							<div class="col-md-9">
 								<h1 class="card-title">Ingredients</h1>
 							</div>
-							<div class="col-md-1">
+							<div class="col-md-3">
 								<a class="btn btn-secondary" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">View</a>
 							</div>
 						</div>
@@ -105,8 +115,8 @@
 									<li th:each="ingredient : ${recipe.ingredients}"
 										th:text="${(ingredient.getAmount() +
                                         ' ' + ingredient.getUnitOfMeasure().getDescription() +
-                                        ' - ' + ingredient.getDescription())}">1
-										Teaspoon of Sugar</li>
+                                        ' - ' + ingredient.getDescription())}"
+									>1 Teaspoon of Sugar</li>
 								</ul>
 							</div>
 						</div>
