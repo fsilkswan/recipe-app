@@ -2,13 +2,19 @@ package guru.springframework.services;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -47,6 +53,41 @@ public final class ImageServiceImplTest
         MockitoAnnotations.initMocks(this);
 
         cut = new ImageServiceImpl(recipeRepositoryMock);
+    }
+
+    /**
+     * Test for method: {@linkplain ImageServiceImpl#fetchImageData(Long)}
+     *
+     * @throws Exception
+     *             On errors.
+     */
+    @Test
+    public void testFetchImageData()
+        throws Exception
+    {
+        // GIVEN:
+        final byte[] imageBytes = "fake image data".getBytes();
+        final Byte[] imageBytesBoxed = new Byte[imageBytes.length];
+        for( int i = 0; i < imageBytes.length; i++ )
+        {
+            imageBytesBoxed[i] = Byte.valueOf(imageBytes[i]);
+        }
+
+        final Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        recipe.setImage(imageBytesBoxed);
+
+        when(recipeRepositoryMock.findById(anyLong())).thenReturn(Optional.of(recipe));
+
+        // WHEN:
+        final InputStream inputStream = cut.fetchImageData(1L);
+
+        // THEN:
+        verify(recipeRepositoryMock, times(1)).findById(eq(1L));
+        assertThat(inputStream, is(not(nullValue())));
+        assertThat(inputStream, is(instanceOf(ByteArrayInputStream.class)));
+        assertThat(inputStream.skip(imageBytes.length), is(equalTo(Long.valueOf(imageBytes.length))));
+        assertThat(inputStream.read(), is(equalTo(-1)));
     }
 
     /**

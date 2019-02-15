@@ -1,5 +1,6 @@
 package guru.springframework.controllers;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -14,11 +15,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.ByteArrayInputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -72,6 +78,34 @@ public final class ImageControllerTest
 
         // THEN:
         verify(imageServiceMock, times(1)).saveImageFile(eq(1L), any());
+    }
+
+    /**
+     * Test for method: {@linkplain ImageController#renderImageFromDatabase(String, HttpServletResponse)}
+     *
+     * @throws Exception
+     *             On errors.
+     */
+    @Test
+    public void testRenderImageFromDatabase()
+        throws Exception
+    {
+        // GIVEN:
+        final byte[] imageBytes = "fake image data".getBytes();
+        final ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes);
+
+        when(imageServiceMock.fetchImageData(anyLong())).thenReturn(inputStream);
+
+        // WHEN:
+        final MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/image"))
+                                                        .andExpect(status().isOk())
+                                                        .andReturn().getResponse();
+
+        // THEN:
+        verify(imageServiceMock, times(1)).fetchImageData(eq(1L));
+        assertThat(response.getContentType(), is(equalTo(MediaType.IMAGE_JPEG_VALUE)));
+        // assertThat(response.getContentLength(), is(equalTo(imageBytes.length)));
+        assertThat(response.getContentAsByteArray().length, is(equalTo(imageBytes.length)));
     }
 
     /**

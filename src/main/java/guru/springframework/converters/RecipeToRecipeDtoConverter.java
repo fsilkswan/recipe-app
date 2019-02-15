@@ -51,6 +51,7 @@ public class RecipeToRecipeDtoConverter
         recipeDto.setServings(source.getServings());
         recipeDto.setDirections(source.getDirections());
         recipeDto.setSource(source.getSource());
+        recipeDto.setImage(source.getImage());
         recipeDto.setUrl(source.getUrl());
 
         final NotesDto notesDto = notesToNotesDtoConverter.convert(source.getNotes());
@@ -65,8 +66,6 @@ public class RecipeToRecipeDtoConverter
                                                        .map(currCategory -> categoryToCategoryDtoConverter.convert(currCategory))
                                                        .collect(toSet());
         recipeDto.setCategories(categoryDtosSet);
-
-        // TODO: recipeDto.setImage(...);
 
         return recipeDto;
     }

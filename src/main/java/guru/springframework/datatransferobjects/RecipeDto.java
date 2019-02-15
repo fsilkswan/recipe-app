@@ -19,6 +19,7 @@ public class RecipeDto
     private Difficulty         difficulty;
     private String             directions;
     private Long               id;
+    private Byte[]             image;
     private Set<IngredientDto> ingredients = new HashSet<>();
     private NotesDto           notes;
     private Integer            prepTime;

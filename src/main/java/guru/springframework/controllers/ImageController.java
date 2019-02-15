@@ -2,6 +2,13 @@ package guru.springframework.controllers;
 
 import static java.text.MessageFormat.format;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +42,16 @@ public class ImageController
         imageService.saveImageFile(Long.valueOf(recipeId), imageFile);
 
         return "redirect:/" + "recipe/" + recipeId + "/show";
+    }
+
+    @GetMapping({ "/recipe/{recipeId}/image" })
+    public void renderImageFromDatabase(@PathVariable final String recipeId, final HttpServletResponse response)
+        throws IOException
+    {
+        final InputStream inputStream = imageService.fetchImageData(Long.valueOf(recipeId));
+
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        IOUtils.copy(inputStream, response.getOutputStream());
     }
 
     @GetMapping({ "/recipe/{recipeId}/image_upload_form" })

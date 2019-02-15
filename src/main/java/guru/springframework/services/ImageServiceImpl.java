@@ -2,7 +2,9 @@ package guru.springframework.services;
 
 import static java.text.MessageFormat.format;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -22,6 +24,32 @@ public class ImageServiceImpl
     public ImageServiceImpl(final RecipeRepository recipeRepository)
     {
         this.recipeRepository = recipeRepository;
+    }
+
+    @Override
+    public InputStream fetchImageData(final Long recipeId)
+    {
+        final Optional<Recipe> recipeQueryResult = recipeRepository.findById(recipeId);
+        if( recipeQueryResult.isPresent() == false )
+        {
+            log.error(format("Recipe with ID {0} does not exist, so no image is available!", recipeId));
+            return null; // FIXME: Use an error image!
+        }
+
+        final Byte[] imageBytesBoxed = recipeQueryResult.get().getImage();
+        if( imageBytesBoxed == null )
+        {
+            log.warn(format("There''s no image for recipe with ID {0} available!", recipeId));
+            return getClass().getClassLoader().getResourceAsStream(/* TODO: Use a placeholder image! */"static/images/perfect_guacamole_flashed.jpg");
+        }
+
+        final byte[] imageBytes = new byte[imageBytesBoxed.length];
+        for( int i = 0; i < imageBytesBoxed.length; i++ )
+        {
+            imageBytes[i] = imageBytesBoxed[i].byteValue();
+        }
+
+        return new ByteArrayInputStream(imageBytes);
     }
 
     @Override
